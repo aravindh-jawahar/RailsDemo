@@ -8,7 +8,7 @@ class ArticlesController < ApplicationController
     end
 
     def index
-        render json: { articles: ArticleSerializer.new(@articles.includes(:user, :comments)), count: @articles.count }, status: :ok
+        render json: { articles: ArticleSerializer.new(@articles.includes(:user, comments: :article)), count: @articles.count }, status: :ok
     end
 
     def create

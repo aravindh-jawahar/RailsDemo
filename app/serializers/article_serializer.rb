@@ -1,6 +1,6 @@
 class ArticleSerializer
   include JSONAPI::Serializer
-  attributes :title, :description, :user_id
+  attributes :title, :description, :user_id, :comments
 
   attribute :email do |object|
     object.user.email

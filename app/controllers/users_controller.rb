@@ -2,7 +2,7 @@ class UsersController < ApplicationController
     before_action :authenticate_via_token
 
     def index
-        @users_current = User.includes(:articles)    
+        @users_current = User.includes(articles: :comments)    
         render json: { data: UserSerializer.new(@users_current)}
     end
 
