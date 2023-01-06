@@ -6,7 +6,7 @@ class UserSerializer
     object.articles
   end
 
-  attribute :roles do |object|
-    object.roles
-  end
+  # attribute :roles do |object|
+  #   object.roles
+  # end
 end
