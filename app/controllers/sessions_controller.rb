@@ -9,7 +9,7 @@ class SessionsController < Clearance::SessionsController
         else
             @user = User.new(user_params)
             if @user.save
-                # @user.user_roles.create(role: Role.find_by(name: params[:user_type]))
+                @user.user_roles.create(role: Role.find_by(name: params[:user_type]))
                 render json: @user, status: :created
             else
                 render json: {data: 'Try again, sign up failed'}, status: :internal_server_error
