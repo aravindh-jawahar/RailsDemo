@@ -5,4 +5,8 @@ class UserSerializer
   attribute :articles do |object|
     object.articles
   end
+
+  attribute :roles do |object|
+    object.roles
+  end
 end
