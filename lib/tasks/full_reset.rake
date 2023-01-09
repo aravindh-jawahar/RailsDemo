@@ -14,6 +14,9 @@ namespace :db do
       create_super_admin
       create_company_admin
       create_employee
+      create_articles
+      add_comments_to_articles
+      add_comments_to_other_user_post
     end
 
     def create_roles
@@ -68,9 +71,46 @@ namespace :db do
         puts 'creating articles for the users'
         article_data = [
             { title: 'title1', description: 'description1' },
-            { title: 'title1', description: 'description1' },
-            { title: 'title1', description: 'description1' }
+            { title: 'title2', description: 'description2' },
+            { title: 'title3', description: 'description3' }
         ]
+        User.all.each do |user_current|
+            article_data.each do |article|
+                Article.create!(title: article[:title], description: article[:description], user_id: user_current.id)
+            end
+        end
+    end
+
+    def add_comments_to_articles
+        puts 'Adding comments to the controller'
+        comment_data = [
+            { comment: 'comment1', user_id: 7 },
+            { comment: 'comment2', user_id: 8 },
+            { comment: 'comment3', user_id: 9 }
+        ]
+        Article.all.each do |article|
+            comment_data.each do |current_comment|
+                Comment.create!(comment: current_comment[:comment], article_id: article[:id], user_id: current_comment[:user_id])
+            end
+        end
+    end
+
+    def add_comments_to_other_user_post
+        puts 'Adding comments to other users articles'
+        comment_data = [
+            { comment: 'sub comment1', user_id: 7 },
+            { comment: 'sub comment2', user_id: 8 },
+            { comment: 'sub comment3', user_id: 9 }
+        ]
+        comment_data.each do |mock_comment_data|
+            Article.all.each do |article|
+                Comment.all.each do |comment|
+                    if comment.article_id == article.id
+                        Comment.create!(comment: mock_comment_data[:comment], user_id: mock_comment_data[:user_id], article_id: article.id, parent_id: comment.id)
+                    end
+                end
+            end
+        end
     end
 end  
 
