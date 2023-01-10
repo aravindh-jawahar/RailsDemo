@@ -5,6 +5,10 @@ class User < ApplicationRecord
   has_many :user_roles, dependent: :destroy
   has_many :roles, through: :user_roles
 
+  delegate :employee?, to: :role
+  delegate :company_admin?, to: :role
+  delegate :super_admin?, to: :role
+
   def role
     @role ||= roles.first
   end
