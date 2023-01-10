@@ -2,13 +2,23 @@ class ArticlesController < ApplicationController
     before_action :authenticate_via_token
     load_and_authorize_resource 
     skip_load_resource only: [:create]
+    include Pagy::Backend
 
     def current_ability
         @current_ability ||= ArticleAbility.new(current_user)
     end
 
     def index
-        render json: { articles: ArticleSerializer.new(@articles.includes(:user, comments: :article)), count: @articles.count }, status: :ok
+        items = params[:items] || 10
+        page = params[:page] || 1
+        @pagy, @article_list = pagy(Article.all, items: items, page: page)
+        if @article_list.empty?
+            render json: { data: [], status: :no_content }
+        else
+            render json: { articles: ArticleSerializer.new(@article_list.includes(:user, comments: :article)), 
+            total_pages: @pagy.pages, current_page: @pagy.page, current_page_count: @article_list.count, total_count: @pagy.count }, 
+            status: :ok
+        end
     end
 
     def create

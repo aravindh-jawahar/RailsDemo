@@ -1,9 +1,18 @@
 class UsersController < ApplicationController
     before_action :authenticate_via_token
+    include Pagy::Backend
 
     def index
-        @users_current = User.includes(:roles, articles: :comments).all   
-        render json: { data: UserSerializer.new(@users_current)}
+        items = params[:items] || 10
+        page = params[:page] || 1
+        @pagy, @user_list = pagy(User.all, items: items, page: page)
+        if @user_list.empty?
+            render json: { data: [], status: :no_content }
+        else
+            render json: { data: UserSerializer.new(@user_list.includes(:roles)), 
+            total_pages: @pagy.pages, current_page: @pagy.page, current_page_count: @user_list.count, total_count: @pagy.count }, 
+            status: :ok
+        end
     end
 
     def delete
