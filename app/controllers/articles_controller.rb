@@ -15,7 +15,7 @@ class ArticlesController < ApplicationController
         if @article_list.empty?
             render json: { data: [], status: :no_content }
         else
-            render json: { articles: ArticleSerializer.new(@article_list.includes(:user, comments: :article)), 
+            render json: { articles: ArticleSerializer.new(@article_list.includes(:user, comments: %i[article replies])), 
             total_pages: @pagy.pages, current_page: @pagy.page, current_page_count: @article_list.count, total_count: @pagy.count }, 
             status: :ok
         end

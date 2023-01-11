@@ -15,7 +15,7 @@ class CommentsController < ApplicationController
         if @comment_list.empty?
             render json: { data: [], status: :no_content }
         else
-            render json: { comments: CommentSerializer.new(@comment_list.includes(:user)),
+            render json: { comments: CommentSerializer.new(@comment_list.includes(:user, :replies)),
             total_pages: @pagy.pages, current_page: @pagy.page, current_page_count: @comment_list.count, total_count: @pagy.count }, 
             status: :ok
         end
