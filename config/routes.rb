@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   get 'users' => 'users#index', as: 'users'
 
   get 'articles_list' => 'articles#index'
+  get 'comments_list' => 'comments#index'
   resources :articles, only: [:destroy, :create]
   resources :comments, only: [:destroy, :create]
   post 'sign_up' => 'sessions#create', as: 'sign_up'
