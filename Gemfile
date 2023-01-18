@@ -4,7 +4,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.1.0"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "clearance"
+gem 'clearance'
+gem 'faker'
 gem "rails", "~> 7.0.4"
 gem "pg", "~> 1.1"
 gem "puma", "~> 5.0"
@@ -19,6 +20,8 @@ gem 'pagy'
 gem 'redis'
 gem 'sidekiq'
 gem 'rspec-rails' 
+gem 'factory_bot_rails'
+gem 'database_cleaner'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
