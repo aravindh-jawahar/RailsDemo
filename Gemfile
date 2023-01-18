@@ -18,6 +18,7 @@ gem 'pry'
 gem 'pagy'
 gem 'redis'
 gem 'sidekiq'
+gem 'rspec-rails' 
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -29,4 +30,7 @@ group :development do
   # gem "spring"
 end
 
+group :test do
+  gem 'simplecov', require: false
+end
   
