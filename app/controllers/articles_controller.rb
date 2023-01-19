@@ -11,7 +11,7 @@ class ArticlesController < ApplicationController
     def index
         items = params[:items] || 10
         page = params[:page] || 1
-        @pagy, @article_list = pagy(Article.all, items: items, page: page)
+        @pagy, @article_list = pagy(@articles, items: items, page: page)
         if @article_list.empty?
             render json: { data: [], status: :no_content }
         else

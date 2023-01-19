@@ -8,6 +8,8 @@ class SessionsController < Clearance::SessionsController
             render json: {data: 'Already found'}, status: :not_acceptable
         else
             @user = User.new(user_params)
+            @user.confirmation_token = Clearance::Token.new
+            @user.token_expires_at = DateTime.now + 3.days
             if @user.save
                 @user.user_roles.create(role: Role.find_by(name: params[:user_type]))
                 render json: @user, status: :created

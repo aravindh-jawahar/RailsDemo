@@ -33,12 +33,9 @@ class CommentsController < ApplicationController
     end
 
     def destroy
-        @job_jid = Sidekiq::Client.enqueue_in(Time.now + 3.minutes, CommentDeleteWorker, params[:id])
-        @job = Sidekiq::ScheduledSet.new.find_job(@job_jid)
-        # CommentDeleteWorker.perform_at(Time.now + 3.minutes, params[:id])
-        # render json: {data: 'Data delete scheduled'}, status: :ok
-        if @job
-            render json: {data: 'Data delete scheduled'}, status: :ok
+        @comment = Comment.find_by(id: comment_id)
+        if @comment.destroy
+            render json: {data: 'Data deleted'}, status: :ok
         else
             render json: {data: 'Try again, failed'}, status: :internal_server_error
         end
