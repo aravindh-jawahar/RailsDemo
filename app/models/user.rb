@@ -4,6 +4,7 @@ class User < ApplicationRecord
   validates :email, uniqueness: { case_sensitive: false }
   has_many :user_roles, dependent: :destroy
   has_many :roles, through: :user_roles
+  belongs_to :company
 
   delegate :employee?, to: :role
   delegate :company_admin?, to: :role

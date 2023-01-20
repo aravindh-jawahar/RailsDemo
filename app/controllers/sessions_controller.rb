@@ -12,7 +12,7 @@ class SessionsController < Clearance::SessionsController
             @user.token_expires_at = DateTime.now + 3.days
             if @user.save
                 @user.user_roles.create(role: Role.find_by(name: params[:user_type]))
-                render json: @user, status: :created
+                render json: UserSerializer.new(@user), status: :created
             else
                 render json: {data: 'Try again, sign up failed'}, status: :internal_server_error
             end
@@ -24,7 +24,7 @@ class SessionsController < Clearance::SessionsController
       if user.present?
         @user = authenticate(params)
         sign_in(@user) do |status|
-          render json: @user, status: :ok and return if status.success?
+          render json: UserSerializer.new(@user), status: :ok and return if status.success?
         end
       end
       render json: { message: 'Invalid login' }, status: :bad_request
@@ -39,7 +39,7 @@ class SessionsController < Clearance::SessionsController
 
     private
     def user_params
-        params.permit(:email, :password)
+        params.permit(:email, :password, :company_id)
     end
   end
   

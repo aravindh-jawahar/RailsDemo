@@ -10,7 +10,7 @@ class UsersController < ApplicationController
     def index
         items = params[:items] || 10
         page = params[:page] || 1
-        @pagy, @user_list = pagy(@users, items: items, page: page)
+        @pagy, @user_list = pagy(@users.where(company_id: current_user.company.id), items: items, page: page)
         if @user_list.empty?
             render json: { users: [], status: :no_content }
         else

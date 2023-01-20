@@ -10,6 +10,7 @@ namespace :db do
       Rake::Task['db:migrate'].invoke
   
       Rake::Task['db:seed'].invoke
+      create_company
       create_roles
       create_super_admin
       create_company_admin
@@ -24,6 +25,16 @@ namespace :db do
         Role::ALL_ROLES.each { |role| Role.create!(name: role) }
     end
     
+    def create_company
+        puts 'Creating company'
+        companies = [
+            { name: 'Meggitt LLC' },
+            { name: 'Francium' },
+            { name: 'CADS India' }
+        ]
+        Company.insert_all(companies)
+    end
+
     def create_super_admin
         puts 'Creating super admins'
         super_admin_details = [
@@ -31,11 +42,12 @@ namespace :db do
             { email: 'super_admin2@user.com', password: 'superadmin' },
             { email: 'super_admin3@user.com', password: 'superadmin' }
         ]
-        super_admin_details.each do |admin|
-            user = User.new(email: admin[:email], password: admin[:password])
+        companies = Company.all
+        super_admin_details.each_with_index do |admin, index|
+            user = User.new(email: admin[:email], password: admin[:password], company_id: companies[index][:id])
             user.save!
             user.user_roles.create(role: Role.all_roles[Role::SUPER_ADMIN])
-          end
+        end
     end
     
     def create_company_admin
@@ -45,25 +57,27 @@ namespace :db do
             { email: 'company_admin2@user.com', password: 'companyadmin' },
             { email: 'company_admin3@user.com', password: 'companyadmin' }
         ]
-        company_admin_details.each do |admin|
-            user = User.new(email: admin[:email], password: admin[:password])
+        companies = Company.all
+        company_admin_details.each_with_index do |admin, index|
+            user = User.new(email: admin[:email], password: admin[:password], company_id: companies[index][:id])
             user.save!
             user.user_roles.create(role: Role.all_roles[Role::COMPANY_ADMIN])
-          end
+        end
     end
     
     def create_employee
         puts 'Creating employee admins'
-        company_admin_details = [
+        employee_details = [
             { email: 'employee1@user.com', password: 'employee' },
             { email: 'employee2@user.com', password: 'employee' },
             { email: 'employee3@user.com', password: 'employee' }
         ]
-        company_admin_details.each do |admin|
-            user = User.new(email: admin[:email], password: admin[:password])
+        companies = Company.all
+        employee_details.each_with_index do |admin, index|
+            user = User.new(email: admin[:email], password: admin[:password], company_id: companies[index][:id])
             user.save!
             user.user_roles.create(role: Role.all_roles[Role::EMPLOYEE])
-          end
+        end
     end
     
     
