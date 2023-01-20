@@ -26,7 +26,7 @@ namespace :db do
     end
     
     def create_company
-        puts 'Creating company'
+        puts 'Creating companies'
         companies = [
             { name: 'Meggitt LLC' },
             { name: 'Francium' },
@@ -96,15 +96,19 @@ namespace :db do
     end
 
     def add_comments_to_articles
-        puts 'Adding comments to the controller'
+        puts 'Adding comments to the articles'
         comment_data = [
             { comment: 'comment1', user_id: 7 },
             { comment: 'comment2', user_id: 8 },
             { comment: 'comment3', user_id: 9 }
         ]
-        Article.all.each do |article|
-            comment_data.each do |current_comment|
-                Comment.create!(comment: current_comment[:comment], article_id: article[:id], user_id: current_comment[:user_id])
+        Company.all.each_with_index do |company, index|
+            Article.all.each do |article|
+                if company.id == article.user.company.id
+                    comment_data.each do |current_comment|
+                        Comment.create!(comment: current_comment[:comment], article_id: article[:id], user_id: current_comment[:user_id])
+                    end
+                end
             end
         end
     end
@@ -116,11 +120,15 @@ namespace :db do
             { comment: 'sub comment2', user_id: 8 },
             { comment: 'sub comment3', user_id: 9 }
         ]
-        comment_data.each do |mock_comment_data|
-            Article.all.each do |article|
-                Comment.all.each do |comment|
-                    if comment.article_id == article.id
-                        Comment.create!(comment: mock_comment_data[:comment], user_id: mock_comment_data[:user_id], article_id: article.id, parent_id: comment.id)
+        Company.all.each_with_index do |company, index|
+            comment_data.each do |mock_comment_data|
+                Article.all.each do |article|
+                    if company.id == article.user.company.id
+                        Comment.all.each do |comment|
+                            if comment.article_id == article.id && company.id == comment.user.company.id
+                                Comment.create!(comment: mock_comment_data[:comment], user_id: mock_comment_data[:user_id], article_id: article.id, parent_id: comment.id)
+                            end
+                        end
                     end
                 end
             end

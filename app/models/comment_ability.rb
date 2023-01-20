@@ -3,7 +3,7 @@ class CommentAbility
 
     def initialize(user)
         return if user.blank?
-        can :create, Comment
+        can :create, Comment, Article: { User: { company_id: user.company.id } }
         # can [:read, :destroy], Comment, user_id: user.id || article: { user_id: user: id }
         # can [:read, :destroy], Comment, article: { user_id: user: id }
         can [:read, :destroy], Comment do |l|
